@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  api:
+    container_name: simpleserver
+    image: ksobitov/simpleserver
+    restart: always
+    environment:
+      - PORT=5000
+    expose:
+      - 5000
+    ports:
+      - 5000:5000
+  watchtower:
+    container_name: watchtower
+    image: containrrr/watchtower
+    environment:
+      - WATCHTOWER_CLEANUP=true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --interval 30 simpleserver
