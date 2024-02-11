@@ -1,0 +1,11 @@
+.env
+.env.local
+.git
+node_modules
+Dockerfile
+docker-compose
+.dockerignore
+dist
+build
+README.md
+LICENSE
