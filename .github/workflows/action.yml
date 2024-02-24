@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    name: build && push image to docker hub
+    name: Build && Push image to DockerHub
     runs-on: ubuntu-latest
     steps:
       -
@@ -34,3 +34,19 @@ jobs:
           file: Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/simpleserver:latest
+
+  deploy:
+    needs: build
+    name: Deploy code to server
+    runs-on: ubuntu-latest
+    steps:
+      - name: executing remote ssh commands using ssh key
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd ~/projects/nodejs/simpleserver
+            docker compose up --build -d
